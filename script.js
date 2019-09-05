@@ -25,7 +25,7 @@ function displayGameboard() {
     let cell = document.querySelectorAll('td')
     cell.forEach((cell) => {
         for(i = 0; i < Gameboard.gameboard.length; i++){
-            Gameboard.gameboard[i] = cell.innerHTML 
+            cell.innerHTML = Gameboard.gameboard[i] 
         }
     })
 }
@@ -36,6 +36,8 @@ let table = document.querySelector('table')
 table.addEventListener('click', function(e) {
     if (e.target.innerHTML == "") {
         e.target.innerHTML = GameObj.currentPlayer.getMark()
+        let index = e.target.dataset.key
+        Gameboard.gameboard[index] = e.target.innerHTML
         if (GameObj.currentPlayer == p1) {
             GameObj.currentPlayer = p2
             GameObj.otherPlayer = p1
@@ -52,17 +54,8 @@ function resetGame() {
         "", "", "", 
         "", "", ""
     ]
+    displayGameboard()
 }
-
-// // Check if values are equal
-// const allEqual = arr => arr.every(v => v === arr[0])
-
-// //  00 01 02 Gameboard.gameboard[0]
-// //  10 11 12 Gameboard.gameboard[1]
-// //  20 21 22 Gameboard.gameboard[2]
-
-// // Get columns array
-// const arrayColumn = (arr, n) => arr.map(x => x[n])
 
 let wins = [
     [0,1,2],
@@ -77,22 +70,30 @@ let wins = [
 
 
 function isWinner(board) {
+    let message = document.querySelector('#message')
     for(let i = 0; i < wins.length; i++) {
         let a, b, c;
 
-        console.log(board[wins[i][0]])
-        console.log(board[wins[i][1]] )
-        console.log(board[wins[i][2]])
+        a = board[wins[i][0]] 
+        b = board[wins[i][1]] 
+        c = board[wins[i][2]] 
 
+        if(a == b && a == c && a != "") {
+            message.innerHTML = `${a} is the winner!`
+            return a
+        }
     }
-
-    //     a = board[wins[i][0]] 
-    //     b = board[wins[i][1]] 
-    //     c = board[wins[i][2]] 
-
-    //     if(a == b && a == c && a != "") {
-    //         return a
-    //     }
-    // }
-    // return false
+    message.innerHTML = `Draw!`
+    return false
 }
+
+
+// // Check if values are equal
+// const allEqual = arr => arr.every(v => v === arr[0])
+
+// //  00 01 02 Gameboard.gameboard[0]
+// //  10 11 12 Gameboard.gameboard[1]
+// //  20 21 22 Gameboard.gameboard[2]
+
+// // Get columns array
+// const arrayColumn = (arr, n) => arr.map(x => x[n])
