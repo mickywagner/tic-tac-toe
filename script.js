@@ -12,14 +12,42 @@ let player = (name, marker) => {
     return { getName, getMark}
 };
 
-let p1 = player('micky', 'X')
-let p2 = player('mitch', 'O')
+let playGame = (e) => {
+    e.preventDefault();
+    let name1 = document.querySelector('#p1').value
+    let name2 = document.querySelector('#p2').value
+    let p1 = player(name1, 'X')
+    let p2 = player(name2, 'O')
+    toggleModal()
 
-let GameObj = {
-    currentPlayer: p1,
-    moves: 1,
-    otherPlayer: p2
-};
+    let currentPlayer = p1
+    let otherPlayer = p2
+    let counter = 0
+    nextMove(currentPlayer.getName())
+    let table = document.querySelector('table')
+    table.addEventListener('click', function(e) {
+        if(e.target.innerHTML == "") {
+        e.target.innerHTML = currentPlayer.getMark()
+            
+        let index = e.target.dataset.key
+        Gameboard.gameboard[index] = e.target.innerHTML
+        counter++
+        if (currentPlayer == p1) {
+            currentPlayer = p2
+            otherPlayer = p1
+        } else {
+            currentPlayer = p1
+            otherPlayer = p2
+        }
+        nextMove(currentPlayer.getName())
+        if(counter == 9 && isWinner(Gameboard.gameboard) == false) {
+            let message = document.querySelector('#message')
+            message.innerHTML = "Draw!"
+        }
+        isWinner(Gameboard.gameboard)
+    }
+})
+}
 
 function displayGameboard() {
     let cell = document.querySelectorAll('td')
@@ -29,24 +57,6 @@ function displayGameboard() {
         }
     })
 }
-
-// needs to go inside something - Game ?
-
-let table = document.querySelector('table')
-table.addEventListener('click', function(e) {
-    if (e.target.innerHTML == "") {
-        e.target.innerHTML = GameObj.currentPlayer.getMark()
-        let index = e.target.dataset.key
-        Gameboard.gameboard[index] = e.target.innerHTML
-        if (GameObj.currentPlayer == p1) {
-            GameObj.currentPlayer = p2
-            GameObj.otherPlayer = p1
-        } else {
-            GameObj.currentPlayer = p1
-            GameObj.otherPlayer = p2
-        }
-    }
-})
 
 function resetGame() {
     Gameboard.gameboard = [
@@ -68,7 +78,6 @@ let wins = [
     [2,4,6]
 ]
 
-
 function isWinner(board) {
     let message = document.querySelector('#message')
     for(let i = 0; i < wins.length; i++) {
@@ -83,9 +92,39 @@ function isWinner(board) {
             return a
         }
     }
-    message.innerHTML = `Draw!`
     return false
 }
+
+function nextMove(player) {
+    let message = document.querySelector('#message')
+    message.innerHTML = `Next move: ${player}`
+}
+
+function toggleModal() {
+    let modal = document.querySelector('.bg-modal')
+    let modalContent = document.querySelector('.modal-content')
+    modal.classList.toggle('hide-modal') 
+    modalContent.classList.toggle('hide-modal')
+}
+
+let startBtn = document.querySelector("#startGame")
+startBtn.addEventListener('click', playGame)
+
+
+
+
+
+
+
+
+
+// function() {
+    
+//     toggleModal()
+// })
+
+
+
 
 
 // // Check if values are equal
@@ -97,3 +136,10 @@ function isWinner(board) {
 
 // // Get columns array
 // const arrayColumn = (arr, n) => arr.map(x => x[n])
+
+// things to do: 
+// 1. put together game flow
+// 2. Allow players to add themselves
+// 3. Clean up front-end
+// 4. Add computer
+// 5. Add score counter
