@@ -13,6 +13,12 @@ let player = (name, marker, color) => {
     return { getName, getMark, getColor}
 };
 
+let Game = {
+    currentPlayer: "",
+    otherPlayer: "",
+    counter: 0,
+}
+
 let playGame = (e) => {
     e.preventDefault();
     let name1 = document.querySelector('#p1').value
@@ -21,32 +27,34 @@ let playGame = (e) => {
     let p2 = player(name2, 'O', 'blue')
     toggleModal()
 
-    let currentPlayer = p1
-    let otherPlayer = p2
-    let counter = 0
-    nextMove(currentPlayer.getName())
+    Game.currentPlayer = p1
+    Game.otherPlayer = p2
+
+    nextMove(Game.currentPlayer.getName())
+    displayNames(p1.getName(), p2.getName())
+    
     let table = document.querySelector('table')
     table.addEventListener('click', function(e) {
         if(e.target.innerHTML == "") {
-        e.target.innerHTML = currentPlayer.getMark()
-        e.target.style.color = currentPlayer.getColor()
+        e.target.innerHTML = Game.currentPlayer.getMark()
+        e.target.style.color = Game.currentPlayer.getColor()
             
         let index = e.target.dataset.key
         Gameboard.gameboard[index] = e.target.innerHTML
-        counter++
-        if (currentPlayer == p1) {
-            currentPlayer = p2
-            otherPlayer = p1
+        Game.counter++
+        if (Game.currentPlayer == p1) {
+            Game.currentPlayer = p2
+            Game.otherPlayer = p1
         } else {
-            currentPlayer = p1
-            otherPlayer = p2
+            Game.currentPlayer = p1
+            Game.otherPlayer = p2
         }
-        nextMove(currentPlayer.getName())
+        nextMove(Game.currentPlayer.getName())
         isWinner(Gameboard.gameboard)
-        if(counter == 9 && isWinner(Gameboard.gameboard) == false) {
+        if(Game.counter == 9 && isWinner(Gameboard.gameboard) == false) {
             let message = document.querySelector('#message')
             message.innerHTML = "Draw!"
-        }
+        } 
     }
 })
 }
@@ -58,6 +66,14 @@ function displayGameboard() {
             cell.innerHTML = Gameboard.gameboard[i] 
         }
     })
+}
+
+function displayNames(name1, name2) {
+    let pName1 = document.querySelector("#nameP1")
+    let pName2 = document.querySelector("#nameP2")
+
+    pName1.textContent = `Player X: ${name1}`
+    pName2.textContent = `Player O: ${name2}`
 }
 
 function resetGame() {
@@ -85,7 +101,7 @@ function isWinner(board) {
         c = board[wins[i][2]] 
 
         if(a == b && a == c && a != "") {
-            message.innerHTML = `${a} is the winner!`
+            message.innerHTML = `${Game.otherPlayer.getName()} is the winner!`
             return a
         }
     }
@@ -97,19 +113,18 @@ function nextMove(player) {
     message.innerHTML = `Next move: ${player}`
 }
 
-function toggleModal() {
-    let modal = document.querySelector('.bg-modal')
-    let modalContent = document.querySelector('.modal-content')
-    modal.classList.toggle('hide-modal') 
-    modalContent.classList.toggle('hide-modal')
-}
-
 let startBtn = document.querySelector("#startGame")
 startBtn.addEventListener('click', playGame)
 
 let resetBtn = document.querySelector('#reset')
 resetBtn.addEventListener('click', resetGame)
 
+function toggleModal() {
+    let modal = document.querySelector('.bg-modal')
+    let modalContent = document.querySelector('.modal-content')
+    modal.classList.toggle('hide-modal') 
+    modalContent.classList.toggle('hide-modal')
+}
 
 
 
