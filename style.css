@@ -87,6 +87,15 @@ input[type="submit"] {
 
 .p2 {
     order: 2;
+    color: blue;
+}
+
+.p1 {
+    color: red;
+}
+
+h2 {
+    font-size: 3em;
 }
 
 p {

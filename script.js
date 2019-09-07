@@ -6,18 +6,19 @@ let Gameboard = {
     ]
 };
 
-let player = (name, marker) => {
+let player = (name, marker, color) => {
     const getName = () => name
     const getMark = () => marker
-    return { getName, getMark}
+    const getColor = () => color
+    return { getName, getMark, getColor}
 };
 
 let playGame = (e) => {
     e.preventDefault();
     let name1 = document.querySelector('#p1').value
     let name2 = document.querySelector('#p2').value
-    let p1 = player(name1, 'X')
-    let p2 = player(name2, 'O')
+    let p1 = player(name1, 'X', 'red')
+    let p2 = player(name2, 'O', 'blue')
     toggleModal()
 
     let currentPlayer = p1
@@ -28,6 +29,7 @@ let playGame = (e) => {
     table.addEventListener('click', function(e) {
         if(e.target.innerHTML == "") {
         e.target.innerHTML = currentPlayer.getMark()
+        e.target.style.color = currentPlayer.getColor()
             
         let index = e.target.dataset.key
         Gameboard.gameboard[index] = e.target.innerHTML
@@ -40,11 +42,11 @@ let playGame = (e) => {
             otherPlayer = p2
         }
         nextMove(currentPlayer.getName())
+        isWinner(Gameboard.gameboard)
         if(counter == 9 && isWinner(Gameboard.gameboard) == false) {
             let message = document.querySelector('#message')
             message.innerHTML = "Draw!"
         }
-        isWinner(Gameboard.gameboard)
     }
 })
 }
@@ -59,12 +61,7 @@ function displayGameboard() {
 }
 
 function resetGame() {
-    Gameboard.gameboard = [
-        "", "", "", 
-        "", "", "", 
-        "", "", ""
-    ]
-    displayGameboard()
+    location.reload()
 }
 
 let wins = [
@@ -110,32 +107,14 @@ function toggleModal() {
 let startBtn = document.querySelector("#startGame")
 startBtn.addEventListener('click', playGame)
 
+let resetBtn = document.querySelector('#reset')
+resetBtn.addEventListener('click', resetGame)
 
 
 
 
 
 
-
-
-// function() {
-    
-//     toggleModal()
-// })
-
-
-
-
-
-// // Check if values are equal
-// const allEqual = arr => arr.every(v => v === arr[0])
-
-// //  00 01 02 Gameboard.gameboard[0]
-// //  10 11 12 Gameboard.gameboard[1]
-// //  20 21 22 Gameboard.gameboard[2]
-
-// // Get columns array
-// const arrayColumn = (arr, n) => arr.map(x => x[n])
 
 // things to do: 
 // 1. put together game flow
