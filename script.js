@@ -17,6 +17,7 @@ let Game = {
     currentPlayer: "",
     otherPlayer: "",
     counter: 0,
+    win: false
 }
 
 let playGame = (e) => {
@@ -50,11 +51,15 @@ let playGame = (e) => {
             Game.otherPlayer = p2
         }
         nextMove(Game.currentPlayer.getName())
-        isWinner(Gameboard.gameboard)
-        if(Game.counter == 9 && isWinner(Gameboard.gameboard) == false) {
+
+        if(Game.counter > 4) {
+            isWinner(Gameboard.gameboard)
+        } else if(Game.counter == 9 && isWinner(Gameboard.gameboard) == false) {
             let message = document.querySelector('#message')
             message.innerHTML = "Draw!"
-        } 
+        } else {
+            isWinner(Gameboard.gameboard)
+        }
     }
 })
 }
@@ -80,6 +85,17 @@ function resetGame() {
     location.reload()
 }
 
+function clearGame() {
+    Gameboard.gameboard = [
+        "", "", "", 
+        "", "", "", 
+        "", "", ""
+    ]
+    displayGameboard()
+    Game.counter = 0
+    nextMove(Game.currentPlayer.getName())
+}
+
 let wins = [
     [0,1,2],
     [3,4,5],
@@ -102,6 +118,7 @@ function isWinner(board) {
 
         if(a == b && a == c && a != "") {
             message.innerHTML = `${Game.otherPlayer.getName()} is the winner!`
+            toggleWinModal()
             return a
         }
     }
@@ -119,11 +136,23 @@ startBtn.addEventListener('click', playGame)
 let resetBtn = document.querySelector('#reset')
 resetBtn.addEventListener('click', resetGame)
 
+let modalBtn = document.querySelector('#close')
+modalBtn.addEventListener('click', function() {
+    toggleWinModal()
+    clearGame()
+})
+
 function toggleModal() {
     let modal = document.querySelector('.bg-modal')
-    let modalContent = document.querySelector('.modal-content')
-    modal.classList.toggle('hide-modal') 
-    modalContent.classList.toggle('hide-modal')
+    modal.classList.toggle('hide-modal')  
+}
+
+function toggleWinModal() {
+    let modal = document.querySelector('.win-modal')
+    let message = document.querySelector('#win-message')
+
+    modal.classList.toggle('hide-modal')
+    message.textContent = `${Game.otherPlayer.getName()} wins!`
 }
 
 
@@ -131,9 +160,4 @@ function toggleModal() {
 
 
 
-// things to do: 
-// 1. put together game flow
-// 2. Allow players to add themselves
-// 3. Clean up front-end
-// 4. Add computer
-// 5. Add score counter
+

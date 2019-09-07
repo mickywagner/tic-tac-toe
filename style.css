@@ -118,7 +118,7 @@ button {
 
 /* modal */
 
-.bg-modal {
+.bg-modal, .win-modal {
     background: rgb(0,0,0,0.7);
     position: absolute;
     top: 0;
@@ -133,10 +133,15 @@ button {
     display: none;
 }
 
-
-.modal-content {
+.modal-content, .win-modal-content {
     background: white;
     padding: 20px;
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
+}
+
+#close {
+    position: relative;
+    top: -10px;
+    float: right;
 }
