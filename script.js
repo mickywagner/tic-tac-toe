@@ -17,7 +17,9 @@ let Game = {
     currentPlayer: "",
     otherPlayer: "",
     counter: 0,
-    win: false
+    scoreP1: 0,
+    scoreP2: 0,
+
 }
 
 let playGame = (e) => {
@@ -52,16 +54,14 @@ let playGame = (e) => {
         }
         nextMove(Game.currentPlayer.getName())
 
-        if(Game.counter > 4) {
-            isWinner(Gameboard.gameboard)
-        } else if(Game.counter == 9 && isWinner(Gameboard.gameboard) == false) {
+        if (Game.counter == 9 && isWinner(Gameboard.gameboard) == false) {
             let message = document.querySelector('#message')
             message.innerHTML = "Draw!"
         } else {
-            isWinner(Gameboard.gameboard)
+                isWinner(Gameboard.gameboard)
+                addPoints()
         }
-    }
-})
+}})
 }
 
 function displayGameboard() {
@@ -118,6 +118,12 @@ function isWinner(board) {
 
         if(a == b && a == c && a != "") {
             message.innerHTML = `${Game.otherPlayer.getName()} is the winner!`
+            if(a == 'X') {
+                Game.scoreP1++
+            } else {
+                Game.scoreP2++
+            }
+            addPoints()
             toggleWinModal()
             return a
         }
@@ -142,6 +148,10 @@ modalBtn.addEventListener('click', function() {
     clearGame()
 })
 
+let clearBtn = document.querySelector('#clear')
+clearBtn.addEventListener('click', clearGame)
+
+
 function toggleModal() {
     let modal = document.querySelector('.bg-modal')
     modal.classList.toggle('hide-modal')  
@@ -155,6 +165,14 @@ function toggleWinModal() {
     message.textContent = `${Game.otherPlayer.getName()} wins!`
 }
 
+function addPoints() {
+    let xCount = document.querySelector('#score1')
+    let oCount = document.querySelector('#score2')
+
+    xCount.textContent = "Score: " + Game.scoreP1
+    oCount.textContent = "Score: " + Game.scoreP2
+ 
+}
 
 
 
