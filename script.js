@@ -26,6 +26,10 @@ let playGame = (e) => {
     e.preventDefault();
     let name1 = document.querySelector('#p1').value
     let name2 = document.querySelector('#p2').value
+
+    name1 === '' ? name1 = 'X' : null
+    name2 === '' ? name2 = 'O' : null
+
     let p1 = player(name1, 'X', 'red')
     let p2 = player(name2, 'O', 'blue')
     toggleModal()
@@ -77,8 +81,8 @@ function displayNames(name1, name2) {
     let pName1 = document.querySelector("#nameP1")
     let pName2 = document.querySelector("#nameP2")
 
-    pName1.textContent = `Player X: ${name1}`
-    pName2.textContent = `Player O: ${name2}`
+    pName1.textContent = `Player 1: ${name1}`
+    pName2.textContent = `Player 2: ${name2}`
 }
 
 function resetGame() {
